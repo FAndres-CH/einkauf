@@ -1,5 +1,8 @@
 package com.nikotin.menueinkauf;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
@@ -13,6 +16,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -71,14 +77,38 @@ public class startFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.mymenu_menu, menu);  // Use filter.xml from step 1
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.itemOpenSavedMenu){
+            SharedPreferences sp = getActivity().getPreferences(Activity.MODE_PRIVATE);
+            int menuId = sp.getInt("menuId_gemerkt", -1);
+            if(menuId == -1){
+                Toast.makeText(getContext(), "Kein gemerktes Menu gefunden", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            doSavedMenuCall(menuId);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -100,9 +130,40 @@ public class startFragment extends Fragment implements View.OnClickListener{
         }
         return v;
     }
-    /**
 
-     **/
+    private void doSavedMenuCall(int menuId) {
+        //DV: Part of Retrofit Code
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        RetroMenuAPI retroMenuAPI = retrofit.create(RetroMenuAPI.class);
+
+        Call<MenuNormal> callMenu = retroMenuAPI.loadMenu(menuId);
+        callMenu.enqueue(new Callback<MenuNormal>() {
+            @Override
+            public void onResponse(Call<MenuNormal> call, Response<MenuNormal> response) {
+                //DV: The response Object is in the Body.
+                if (response.body() == null) {
+                    Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ((MainActivity) getActivity()).setSelectedMenu(response.body());
+                fillMenu();
+            }
+
+            @Override
+            public void onFailure(Call<MenuNormal> call, Throwable t) {
+                Toast.makeText(getActivity(), "Service nicht erreicht. Daten konnten nicht geladen werden", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void doRandMenueCall(){
         //DV: Part of Retrofit Code
         Gson gson = new GsonBuilder()
@@ -171,7 +232,7 @@ public class startFragment extends Fragment implements View.OnClickListener{
         MenuNormal mn=((MainActivity) getActivity()).getSelectedMenu();
         txtViewMenuTitle.setText(mn.getName());
         txtViewMenuInfo.setText(mn.getArt()+" | "+mn.getKueche());
-        Picasso.with(getContext()).load(mn.bildUrl).into(imgViewMenu);
+        Picasso.with(getContext()).load(mn.getBildUrl()).into(imgViewMenu);
 
     }
 

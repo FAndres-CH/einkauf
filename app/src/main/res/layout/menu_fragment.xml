@@ -1,79 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
-    tools:context=".menuFragment" >
-
-    <ImageView
-        android:id="@+id/image_view_menu"
+    android:background="#DFDEDF"
+    android:fadingEdge="horizontal|vertical"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:paddingBottom="20dp"
+    android:theme="@style/Theme.AppCompat"
+    tools:context=".startFragment"
+    android:layout_gravity="center">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="50dp"
-        android:alpha="0.95"
-        android:baselineAlignBottom="false"
-        android:fadingEdge="horizontal|vertical"
-        android:scaleType="fitXY"
-        android:src="@drawable/gradient" />
-
-    <TextView
-        android:id="@+id/txtViewMenueTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="80px"
-        android:layout_marginLeft="10px"
-        android:alpha="0.7"
-        android:background="#BEBEBE"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="60px"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/txtViewMenueKueche"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="660px"
-        android:layout_marginLeft="10px"
-        android:alpha="0.7"
-        android:background="#BEBEBE"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="40px"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/txtViewMenueArt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="710px"
-        android:layout_marginLeft="10px"
-        android:alpha="0.7"
-        android:background="#BEBEBE"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="40px"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/txtViewMenueZutaten"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginLeft="15px"
-        android:layout_marginTop="780px"
-        android:alpha="0.7"
-        android:background="#BEBEBE"
-        android:scrollIndicators="right"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="40px" />
-
-
-</FrameLayout>
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/round_bg"
+        android:paddingTop="20dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="20dp">
+        <TextView
+            android:id="@+id/buttonMenuMerken"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#504e54"
+            android:enabled="true"
+            android:gravity="center|center_vertical"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:text="MENU MERKEN" />
+        <TextView
+            android:id="@+id/txtViewMenueTitle"
+            android:layout_gravity="center|top"
+            android:textSize="20sp"
+            android:textColor="#504e54"
+            android:textStyle="bold"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="288dp">
+            <ImageView
+                android:id="@+id/image_view_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:alpha="0.98"
+                android:scaleType="fitXY" />
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/txtViewMenueKueche"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:textColor="#504e54"
+            android:textStyle="bold"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtViewMenueArt"
+            android:layout_gravity="center|top"
+            android:textSize="14sp"
+            android:textColor="#504e54"
+            android:textStyle="bold"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_gravity="start|top"
+            android:textSize="14sp"
+            android:layout_marginTop="14dp"
+            android:textColor="#504e54"
+            android:textStyle="bold"
+            android:text="Zutaten:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtViewMenueZutaten"
+            android:layout_gravity="start|top"
+            android:textSize="12sp"
+            android:textColor="#504e54"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_gravity="start|top"
+            android:textSize="14sp"
+            android:layout_marginTop="14dp"
+            android:textColor="#504e54"
+            android:textStyle="bold"
+            android:text="Zubereitung:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtViewMenuZubereitung"
+            android:layout_gravity="start|top"
+            android:textSize="12sp"
+            android:textColor="#504e54"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

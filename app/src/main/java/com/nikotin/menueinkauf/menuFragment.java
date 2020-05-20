@@ -1,6 +1,8 @@
 package com.nikotin.menueinkauf;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,15 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import static com.nikotin.menueinkauf.MainActivity.LOG_TAG;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link menuFragment#newInstance} factory method to
+ * Use the {@link menuFragment} factory method to
  * create an instance of this fragment.
  */
 public class menuFragment extends Fragment implements View.OnClickListener {
@@ -28,46 +33,22 @@ public class menuFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private ImageView imgViewMenu;
     private TextView txtViewMenuTitle;
     private TextView txtViewMenuKueche;
     private TextView txtViewMenuArt;
     private TextView txtViewMenuZutaten;
+    private TextView txtViewMenuZubereitung;
+    private TextView buttonMenuMerken;
     private MenuNormal mn;
 
     public menuFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment menuFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static menuFragment newInstance(String param1, String param2) {
-        menuFragment fragment = new menuFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG,"Menu Fragment is started");
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -81,6 +62,9 @@ public class menuFragment extends Fragment implements View.OnClickListener {
         txtViewMenuKueche=(TextView) v.findViewById(R.id.txtViewMenueKueche);
         txtViewMenuArt=(TextView) v.findViewById(R.id.txtViewMenueArt);
         txtViewMenuZutaten=(TextView) v.findViewById(R.id.txtViewMenueZutaten);
+        txtViewMenuZubereitung = (TextView)v.findViewById(R.id.txtViewMenuZubereitung);
+        buttonMenuMerken = (TextView)v.findViewById(R.id.buttonMenuMerken);
+        buttonMenuMerken.setOnClickListener(this);
         mn=((MainActivity) getActivity()).getSelectedMenu();
         fillMenu();
         return v;
@@ -94,10 +78,20 @@ public class menuFragment extends Fragment implements View.OnClickListener {
         txtViewMenuArt.setText("Art: "+mn.getArt());
         txtViewMenuZutaten.setText("Zutaten für "+mn.getAnzPersonen().toString()+" Personen: \n"
                 +mn.getZutaten());
+        txtViewMenuZubereitung.setText(mn.getZubereitung());
     }
 
     @Override
     public void onClick(View v) {
-        //todo: falls noch auf das Bild geklickt werden soll
+        if(v == buttonMenuMerken){
+            SharedPreferences sp = getActivity().getPreferences(Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("menuId_gemerkt", mn.getMenuId());
+            editor.apply();
+
+            buttonMenuMerken.setBackgroundColor(Color.rgb(10,140, 60));
+
+            Toast.makeText(getContext(), "Menu wurde gemerkt", Toast.LENGTH_LONG).show();
+        }
     }
 }
